@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  strategy:
+    type: RollingUpdate    # set the rollout strategy to RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1    # maximum number of unavailable pods during update
+      maxSurge: 1          # maximum number of new pods created during update
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: mahirmansuri/poc2:frontend
+          ports:
+            - containerPort: 80
+          env:
+            - name: REACT_APP_BACKEND_URL
+              value: "http://backend:30001"
